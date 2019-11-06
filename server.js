@@ -11,7 +11,7 @@ app.use(bodyParser.json())
 
 const mongoDBURL = require('./config/database.config')
 
-mongoose.connect(dbConfig.url, {
+mongoose.connect(mongoDBURL.url, {
   useNewUrlParser: true, useUnifiedTopology: true 
 }).then(() => {
   console.log("Successfully connected to the database");    
