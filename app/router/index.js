@@ -1,7 +1,7 @@
 const express = require('express')
 const user = require('./user')
 const question = require('./question')
-const gameType = require('./ogameTyperder')
+const gameType = require('./gameType')
 
 const router = express.Router()
 
