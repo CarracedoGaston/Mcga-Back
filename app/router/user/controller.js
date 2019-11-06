@@ -1,4 +1,4 @@
-const User = require('../../models/user')
+const User = require('../../models/user.model')
 
 const getAll = (req, res) => {
   User.find({}, {password: 0, __v: 0},  (err, users) => {
