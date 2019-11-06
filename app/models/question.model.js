@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const UserSchema = new Schema({
+const QuestionSchema = new Schema({
   id: Schema.Types.ObjectId,
   user: { type: Schema.Types.ObjectId, ref: 'User'},
   gameType: { type: Schema.Types.ObjectId, ref: 'GameType'},
@@ -14,4 +14,4 @@ const UserSchema = new Schema({
   thirdQuantity: { type: Number, required: true, min: 0}
 })
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model('Question', QuestionSchema)
