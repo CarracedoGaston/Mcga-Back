@@ -20,7 +20,6 @@ router.post('/', insert)
 router.put('/:id', upsert)
 router.patch('/:id', update)
 router.delete('/:id', remove)
-router.post('/signIn', signIn)
 
 module.exports = router
 
