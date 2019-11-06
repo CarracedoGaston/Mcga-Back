@@ -1,84 +1,57 @@
-const User = require('../../models/user.model')
+const User = require('../../models/user')
 
 const getAll = (req, res) => {
-  User.find()
-    .then(users => {
-      res.send(users)
-    }).catch(err => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving users."
-      })
-    })
+  User.find({}, {password: 0, __v: 0},  (err, users) => {
+    if (err) res.send({msg: 'Cant`t get the user list', error: err})
+    res.send(users)
+  })
 }
 
 const getById = (req, res) => {
-  user.findById(req.params.userId)
-    .then(user => {
-      if (!user) {
-        return res.status(404).send({
-          message: "user not found with id " + req.params.userId
-        })
-      }
-      res.send(user);
-    }).catch(err => {
-      if (err.kind === 'ObjectId') {
-        return res.status(404).send({
-          message: "user not found with id " + req.params.userId
-        })
-      }
-      return res.status(500).send({
-        message: "Error retrieving user with id " + req.params.userId
-      })
-    })
+  User.findById(req.params.id, (err, user) => {
+    if (err) res.send({msg: `Cant't get the user ${req.params.id}`, error: err})
+    res.send(user)
+  }) 
 }
 
 const insert = (req, res) => { 
-  if (!req.body.name) {
-    return res.status(400).send({
-      message: "user content can not be empty"
-    })
-  }
   const user = new User({
     name: req.body.name,
-    password: req.body.password,
-    email: req.body.email
+    email: req.body.email,
+    password: req.body.password
   })
-  user.save()
-    .then(data => {
-      res.send(data);
-    }).catch(err => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while creating the user."
-      })
-    })
+  user.save((err) => {
+    if (err) res.send({msg: 'Cant`t save the user', error: err})
+    res.send('User saved')
+  })
+}
+
+const upsert  = (req, res) => {
+  User.updateOne({_id: req.params.id}, {...req.body}, (err) => {
+    if (err) res.send({msg: `Cant't upsert the user ${req.params.id}`, error: err})
+    res.send('User upserted')
+  })
+}
+
+const update  = (req, res) => {
+  User.updateOne({_id: req.params.id}, {[Object.keys(req.body)]: req.body[Object.keys(req.body)]}, (err) => {
+    if (err) res.send({msg: `Cant't update the user ${req.params.id}`, error: err})
+    res.send('User updated')
+  })
 }
 
 const remove = (req, res) => {
-  user.findByIdAndRemove(req.params.userId)
-    .then(user => {
-      if (!user) {
-        return res.status(404).send({
-          message: "user not found with id " + req.params.userId
-        })
-      }
-      res.send({
-        message: "user deleted successfully!"
-      })
-    }).catch(err => {
-      if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-        return res.status(404).send({
-          message: "user not found with id " + req.params.userId
-        })
-      }
-      return res.status(500).send({
-        message: "Could not delete user with id " + req.params.userId
-      })
-    })
+  User.deleteOne({_id: req.params.id}, (err) => {
+    if (err) res.send({msg: `Cant't delete the user ${req.params.id}`, error: err})
+    res.send('User deleted')
+  }) 
 }
 
 module.exports = {
   getAll,
   getById,
   insert,
-  remove,
+  upsert,
+  update,
+  remove
 }

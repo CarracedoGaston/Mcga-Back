@@ -6,7 +6,10 @@ const  {
   getAll,
   getById,
   insert,
+  upsert,
+  update,
   remove,
+  signIn
 } = controller
 
 router.use(express.json())
@@ -14,7 +17,10 @@ router.use(express.json())
 router.get('/', getAll)
 router.get('/:id', getById)
 router.post('/', insert)
+router.put('/:id', upsert)
+router.patch('/:id', update)
 router.delete('/:id', remove)
+router.post('/signIn', signIn)
 
 module.exports = router
 
