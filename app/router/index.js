@@ -6,7 +6,7 @@ const gameType = require('./gameType')
 const router = express.Router()
 
 router.use('/user', user)
-// router.use('/question', question)
-// router.use('/gametype', gameType)
+router.use('/question', question)
+router.use('/gametype', gameType)
 
 module.exports = router
