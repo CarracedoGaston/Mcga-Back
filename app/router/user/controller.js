@@ -1,4 +1,5 @@
 const User = require('../../models/user.model')
+const sha256 = require('sha256')
 
 const getAll = (req, res) => {
   User.find({}, {password: 0, __v: 0},  (err, users) => {
@@ -18,11 +19,22 @@ const insert = (req, res) => {
   const user = new User({
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password
+    password:  sha256(req.body.password)
   })
   user.save((err) => {
     if (err) res.send({msg: 'Cant`t save the user', error: err})
     res.send('User saved')
+  })
+}
+
+const signIn = (req, res) => { 
+  const user = new User({
+    name: req.body.name, 
+    password: sha256(req.body.password)
+  })
+  User.findOne({name: user.name, password: user.password}, (err, user) => {
+    if(err) res.send({msg: 'dont'})
+    res.send(user)
   })
 }
 
@@ -53,5 +65,6 @@ module.exports = {
   insert,
   upsert,
   update,
-  remove
+  remove,
+  signIn
 }
