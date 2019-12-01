@@ -1,5 +1,13 @@
 const User = require('../../models/user.model')
 const sha256 = require('sha256')
+const jwt = require('jsonwebtoken')
+
+const createToken = email => {
+  const data = { email }
+  const secretKey = 'ClaseMCGA'
+  const options = { expiresIn: '1d'}
+  const token = jwt.sign(data, secretKey, options)
+}
 
 const getAll = (req, res) => {
   User.find({}, {password: 0, __v: 0},  (err, users) => {
@@ -27,13 +35,16 @@ const insert = (req, res) => {
   })
 }
 
-const signIn = (req, res) => { 
-  const user = new User({
-    name: req.body.name, 
-    password: sha256(req.body.password)
-  })
-  User.findOne({name: user.name, password: user.password}, (err, user) => {
-    if(err) res.send({msg: 'dont'})
+const signIn = (req, res) => {
+  const { name, password } = req.body
+  User.findOne(
+    { name, password: sha256(password) },
+    { password: 0 },
+    // { token: createToken(email) },
+    (err, user) => {
+    if (err) return res.status(500).send({ msg: 'Error del servidor', error: err })
+    if (!user) return res.status(401).send({ msg: 'Email o contraseña invalidos', error: err })
+    // res.send(user)
     res.send(user)
   })
 }
