@@ -2,6 +2,10 @@ const User = require('../../models/user.model')
 const sha256 = require('sha256')
 const jwt = require('jsonwebtoken')
 
+const au= (req, res) => {
+  res.status(200).send({message: 'Authorized USer'})
+}
+
 const createToken = email => {
   const data = { email }
   const secretKey = 'ClaseMCGA'
