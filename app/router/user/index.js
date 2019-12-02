@@ -9,7 +9,8 @@ const  {
   upsert,
   update,
   remove,
-  signIn
+  signIn,
+  signUp
 } = controller
 
 router.use(express.json())
@@ -18,6 +19,7 @@ router.get('/', getAll)
 router.get('/:id', getById)
 router.post('/', insert)
 router.post('/signIn', signIn)
+router.post('/signUp', signUp)
 router.put('/:id', upsert)
 router.patch('/:id', update)
 router.delete('/:id', remove)
