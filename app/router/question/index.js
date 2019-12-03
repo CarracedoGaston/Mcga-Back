@@ -1,5 +1,7 @@
 const express = require('express')
 const controller = require('./controller')
+const auth = require('../../middlewares/auth')
+
 
 const router = express.Router()
 const  {
@@ -15,9 +17,9 @@ router.use(express.json())
 
 router.get('/', getAll)
 router.get('/:id', getById)
-router.post('/', insert)
-router.put('/:id', upsert)
-router.patch('/:id', update)
-router.delete('/:id', remove)
+router.post('/', auth, insert)
+router.put('/:id', auth, upsert)
+router.patch('/:id', auth, update)
+router.delete('/:id', auth, remove)
 
 module.exports = router
