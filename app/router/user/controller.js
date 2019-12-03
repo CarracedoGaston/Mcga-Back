@@ -1,13 +1,7 @@
 const User = require('../../models/user.model')
 const sha256 = require('sha256')
 const jwt = require('jsonwebtoken')
-
-const createToken = email => {
-  const data = { email }
-  const secretKey = 'ClaseMCGA'
-  const options = { expiresIn: '1d'}
-  const token = jwt.sign(data, secretKey, options)
-}
+const service = require('../../services')
 
 const getAll = (req, res) => {
   User.find({}, {password: 0, __v: 0},  (err, users) => {
@@ -35,17 +29,28 @@ const insert = (req, res) => {
   })
 }
 
+const signUp = (req, res) => {
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password:  sha256(req.body.password)
+  })
+  user.save((err) => {
+    if (err) res.status(500).send({msg: 'Cant`t save the user: ${err}'})
+    res.status(200).send({token: service.createToken(user)})
+  })
+}
+
 const signIn = (req, res) => {
   const { name, password } = req.body
   User.findOne(
     { name, password: sha256(password) },
     { password: 0 },
-    // { token: createToken(email) },
     (err, user) => {
-    if (err) return res.status(500).send({ msg: 'Error del servidor', error: err })
-    if (!user) return res.status(401).send({ msg: 'Email o contraseña invalidos', error: err })
-    // res.send(user)
-    res.send(user)
+    if (err) return res.status(500).send({ msg: 'Server Error', error: err })
+    if (!user) return res.status(404).send({ msg: 'Invalid Email or password', error: err })
+    req.user= user
+    res.status(200).send({messagge: 'you are logged', token: service.createToken(user)})
   })
 }
 
@@ -77,5 +82,6 @@ module.exports = {
   upsert,
   update,
   remove,
-  signIn
+  signIn, 
+  signUp
 }
