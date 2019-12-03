@@ -8,7 +8,6 @@ function createToken(user){
         iat: moment().unix(),
         esp: moment().add(2, 'hours').unix(),
     }
-    
     return jwt.encode(payload, config.SECRET_TOKEN)
 }
 

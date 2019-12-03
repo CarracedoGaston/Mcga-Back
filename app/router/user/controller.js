@@ -3,12 +3,6 @@ const sha256 = require('sha256')
 const jwt = require('jsonwebtoken')
 const service = require('../../services')
 
-
-/*const au= (req, res) => {
-  res.status(200).send({message: 'Authorized USer'})
-}*/
-
-
 const getAll = (req, res) => {
   User.find({}, {password: 0, __v: 0},  (err, users) => {
     if (err) res.send({msg: 'Cant`t get the user list', error: err})
