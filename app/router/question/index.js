@@ -7,6 +7,7 @@ const router = express.Router()
 const  {
   getAll,
   getById,
+  getByUser, 
   insert,
   upsert,
   update,
@@ -17,6 +18,7 @@ router.use(express.json())
 
 router.get('/', getAll)
 router.get('/:id', getById)
+router.get('/user/:user', getByUser)
 router.post('/', auth, insert)
 router.put('/:id', auth, upsert)
 router.patch('/:id', auth, update)
