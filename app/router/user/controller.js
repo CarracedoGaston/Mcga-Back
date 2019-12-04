@@ -50,7 +50,7 @@ const signIn = (req, res) => {
     if (err) return res.status(500).send({ msg: 'Server Error', error: err })
     if (!user) return res.status(404).send({ msg: 'Invalid Email or password', error: err })
     req.user= user
-    res.status(200).send({messagge: 'you are logged', token: service.createToken(user)})
+    res.status(200).send({messagge: 'you are logged', token: service.createToken(user), user: user._id})
   })
 }
 

@@ -14,6 +14,13 @@ const getById = (req, res) => {
   }) 
 }
 
+const getByUser = (req, res) => {
+  Question.find({user: req.params.user }, (err, question) => {
+    if (err) res.send({msg: `Cant't get the question List ${localStorage.user}`, error: err})
+    res.send(question)
+  }) 
+}
+
 const insert = (req, res) => { 
   const question = new Question({
     title: req.body.title,
@@ -56,6 +63,7 @@ const remove = (req, res) => {
 module.exports = {
   getAll,
   getById,
+  getByUser,
   insert,
   upsert,
   update,
