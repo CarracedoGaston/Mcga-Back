@@ -12,8 +12,6 @@ app.use(bodyParser.json())
 
 app.use(cors())
 
-
-
 const mongoDBURL = require('./config/database.config')
 
 mongoose.connect(mongoDBURL.url, {
