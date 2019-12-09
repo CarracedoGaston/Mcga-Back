@@ -25,7 +25,7 @@ const insert = (req, res) => {
   })
   user.save((err) => {
     if (err) res.send({msg: 'Cant`t save the user', error: err})
-    res.send('User saved')
+    res.send(user)
   })
 }
 

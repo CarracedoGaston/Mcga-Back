@@ -35,30 +35,41 @@ const insert = (req, res) => {
   })
   question.save((err) => {
     if (err) res.send({msg: 'Cant`t save the question', error: err})
-    res.send('Question saved')
+    res.status(200).json(question)
   })
 }
 
 const upsert  = (req, res) => {
   Question.updateOne({_id: req.params.id}, {...req.body}, (err) => {
     if (err) res.send({msg: `Cant't upsert the question ${req.params.id}`, error: err})
-    res.send('Question upserted')
+    res.status(200).json(question)
   })
 }
 
 const update  = (req, res) => {
   Question.updateOne({_id: req.params.id}, {[Object.keys(req.body)]: req.body[Object.keys(req.body)]}, (err) => {
     if (err) res.send({msg: `Cant't update the question ${req.params.id}`, error: err})
-    res.send('Question updated')
+    res.status(200).json(question)
   })
 }
 
 const remove = (req, res) => {
-  Question.deleteOne({_id: req.params.id}, (err) => {
-    if (err) res.send({msg: `Cant't delete the question ${req.params.id}`, error: err})
-    res.send('Question deleted')
-  }) 
+  Question.deleteOne({_id: req.params.id})
+  .then( question => {
+    if(question) {
+      res.status(200).json(question)
+    }
+    else {
+      res.status(400).json({error:error})
+    }
+  })
+  .catch(error => {
+    res.status(400).json({error:error})
+    }
+  )
 }
+
+
 
 module.exports = {
   getAll,
