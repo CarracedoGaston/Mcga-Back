@@ -25,7 +25,7 @@ const insert = (req, res) => {
   })
   user.save((err) => {
     if (err) res.send({msg: 'Cant`t save the user', error: err})
-    res.send('User saved')
+    res.send(user)
   })
 }
 
@@ -37,7 +37,7 @@ const signUp = (req, res) => {
   })
   user.save((err) => {
     if (err) res.status(500).send({msg: 'Cant`t save the user: ${err}'})
-    res.status(200).send({token: service.createToken(user)})
+    res.status(200).json({token: service.createToken(user)})
   })
 }
 
@@ -50,7 +50,7 @@ const signIn = (req, res) => {
     if (err) return res.status(500).send({ msg: 'Server Error', error: err })
     if (!user) return res.status(404).send({ msg: 'Invalid Email or password', error: err })
     req.user= user
-    res.status(200).send({messagge: 'you are logged', token: service.createToken(user), user: user._id})
+    res.status(200).json({messagge: 'you are logged', token: service.createToken(user), user: user._id})
   })
 }
 
