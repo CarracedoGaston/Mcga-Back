@@ -40,9 +40,12 @@ const insert = (req, res) => {
 }
 
 const upsert  = (req, res) => {
-  Question.updateOne({_id: req.params.id}, {...req.body}, (err) => {
-    if (err) res.send({msg: `Cant't upsert the question ${req.params.id}`, error: err})
+  Question.updateOne({_id: req.params.id}, {...req.body})
+  .then(question => {
     res.status(200).json(question)
+  })
+  .catch(error => {
+    res.status(400).json({error:error})
   })
 }
 
