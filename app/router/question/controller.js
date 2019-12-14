@@ -16,7 +16,7 @@ const getById = (req, res) => {
 
 const getByUser = (req, res) => {
   Question.find({user: req.params.user }, (err, question) => {
-    if (err) res.send({msg: `Cant't get the question List ${localStorage.user}`, error: err})
+    if (err) res.send({msg: `Cant't get the question List ${req.params.user}`, error: err})
     res.send(question)
   }) 
 }
@@ -50,9 +50,12 @@ const upsert  = (req, res) => {
 }
 
 const update  = (req, res) => {
-  Question.updateOne({_id: req.params.id}, {[Object.keys(req.body)]: req.body[Object.keys(req.body)]}, (err) => {
-    if (err) res.send({msg: `Cant't update the question ${req.params.id}`, error: err})
+  Question.updateOne({_id: req.params.id}, {...req.body})
+  .then(question => {
     res.status(200).json(question)
+  })
+  .catch(error => {
+    res.status(400).json({error:error})
   })
 }
 
@@ -71,8 +74,6 @@ const remove = (req, res) => {
     }
   )
 }
-
-
 
 module.exports = {
   getAll,
